@@ -1,0 +1,52 @@
+{
+    "name": "myfatoorah/laravel-package",
+    "description": "The official MyFatoorah Payment Gateway for Laravel.",
+    "version": "2.1.0",
+    "type": "library",
+    "license": [
+        "GPL-3.0-only"
+    ],
+    "require": {
+        "myfatoorah/library": "~2.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MyFatoorah\\LaravelPackage\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MyFatoorah\\LaravelPackage\\MyFatoorahServiceProvider"
+            ]
+        }
+    },
+    "keywords": [
+        "MyFatoorah",
+        "My Fatoorah",
+        "Fatoorah",
+        "gateway",
+        "payment",
+        "Shipping",
+        "api",
+        "commerce",
+        "Laravel"
+    ],
+    "homepage": "https://myfatoorah.com/",
+    "authors": [
+        {
+            "name": "MyFatoorah Plugin Team",
+            "email": "plugins@myfatoorah.com"
+        },
+        {
+            "name": "Nermeen Shoman",
+            "email": "nshoman@myfatoorah.com",
+            "role": "Senior Software Engineer"
+        },
+        {
+            "name": "Rasha Saeed",
+            "email": "rsaeed@myfatoorah.com",
+            "role": "Senior Software Engineer"
+        }
+    ]
+}

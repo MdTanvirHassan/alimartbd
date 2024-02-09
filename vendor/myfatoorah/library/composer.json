@@ -1,0 +1,57 @@
+{
+    "name": "myfatoorah/library",
+    "description": "MyFatoorah PHP Library",
+    "version": "2.1.3",
+    "type": "library",
+    "license": [
+        "GPL-3.0-only"
+    ],
+    "require": {
+        "php": ">=7",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9",
+        "phpstan/phpstan": "^1.10"
+    },
+    "autoload": {
+        "files": ["autoload.php"],
+        "psr-4": {
+            "MyFatoorah\\Library\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MyFatoorah\\Test\\": "tests"
+        }
+    },
+    "keywords": [
+        "MyFatoorah",
+        "My Fatoorah",
+        "Fatoorah",
+        "gateway",
+        "payment",
+        "Shipping",
+        "api",
+        "commerce",
+        "Library"
+    ],
+    "homepage": "https://myfatoorah.com/",
+    "authors": [
+        {
+            "name": "MyFatoorah Plugin Team",
+            "email": "plugins@myfatoorah.com"
+        },
+        {
+            "name": "Nermeen Shoman",
+            "email": "nshoman@myfatoorah.com",
+            "role": "Senior Software Engineer"
+        },
+        {
+            "name": "Rasha Saeed",
+            "email": "rsaeed@myfatoorah.com",
+            "role": "Senior Software Engineer"
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "name": "genealabs/laravel-overridable-model",
+    "description": "Provide a uniform method of allowing models to be overridden in Laravel.",
+    "keywords": [
+        "laravel",
+        "nova"
+    ],
+    "license": "MIT",
+    "require": {
+        "illuminate/support": "^9.0",
+        "symfony/thanks": "^1.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "GeneaLabs\\LaravelOverridableModel\\": "src/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

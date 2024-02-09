@@ -1,14 +1,13 @@
 /bootstrap/compiled.php
-.env.*.php
-.env.php
+# .env.*.php
+# .env.php
 /app/Exceptions
 /node_modules
 /public/hot
-/public/storage
-/public/uploads
+# /public/storage
+# /public/uploads
 /storage/*.key
 /storage/debugbar
-/vendor
 /temp
 /.idea
 /.vscode
@@ -23,8 +22,8 @@ yarn-error.log
 updates/
 composer.lock
 *.lock
-resources/lang/en.json
-.env
+# resources/lang/en.json
+# .env
 updates.zip
 ecommerce.zip
 install.zip
