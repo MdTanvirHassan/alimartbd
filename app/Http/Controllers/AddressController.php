@@ -39,16 +39,19 @@ class AddressController extends Controller
     public function store(Request $request)
     {
         $address = new Address;
-        if($request->has('customer_id')){
+        if ($request->has('customer_id')) {
             $address->user_id   = $request->customer_id;
-        }
-        else{
+        } else {
             $address->user_id   = Auth::user()->id;
         }
+
+
         $address->address       = $request->address;
         $address->country_id    = $request->country_id;
         $address->state_id      = $request->state_id;
         $address->city_id       = $request->city_id;
+        $address->zone_id       = $request->zone_id;
+        $address->area_id       = $request->area_id;
         $address->longitude     = $request->longitude;
         $address->latitude      = $request->latitude;
         $address->postal_code   = $request->postal_code;
@@ -58,7 +61,6 @@ class AddressController extends Controller
         flash(translate('Address info Stored successfully'))->success();
         return back();
     }
-
     /**
      * Display the specified resource.
      *

@@ -12,16 +12,7 @@
                 @csrf
                 <div class="modal-body c-scrollbar-light">
                     <div class="p-3">
-                        <!-- Address -->
-                        <div class="row">
-                            <div class="col-md-2">
-                                <label>{{ translate('Address')}}</label>
-                            </div>
-                            <div class="col-md-10">
-                                <textarea class="form-control mb-3 rounded-0" placeholder="{{ translate('Your Address')}}" rows="2" name="address" required></textarea>
-                            </div>
-                        </div>
-
+                        
                         <!-- Country -->
                         <div class="row">
                             <div class="col-md-2">
@@ -29,9 +20,9 @@
                             </div>
                             <div class="col-md-10">
                                 <div class="mb-3">
-                                    <select class="form-control aiz-selectpicker rounded-0" data-live-search="true" data-placeholder="{{ translate('Select your country') }}" name="country_id" required>
+                                    <select class="form-control aiz-selectpicker " data-live-search="true" data-placeholder="{{ translate('Select your country') }}" name="country_id" required>
                                         <option value="">{{ translate('Select your country') }}</option>
-                                        @foreach (get_active_countries() as $key => $country)
+                                        @foreach (\App\Models\Country::where('status', 1)->get() as $key => $country)
                                             <option value="{{ $country->id }}">{{ $country->name }}</option>
                                         @endforeach
                                     </select>
@@ -45,7 +36,7 @@
                                 <label>{{ translate('State')}}</label>
                             </div>
                             <div class="col-md-10">
-                                <select class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="state_id" required>
+                                <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="state_id" required>
 
                                 </select>
                             </div>
@@ -57,9 +48,45 @@
                                 <label>{{ translate('City')}}</label>
                             </div>
                             <div class="col-md-10">
-                                <select class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="city_id" required>
-
+                                <select class="form-control mb-3" id="cityId" name="city_id">
+                                    <option value="">Select City</option>
+                                    @foreach (\App\Models\Pathao_city::orderBy('city_name', 'asc')->get() as $city)
+                                        <option value="{{ $city->city_id }}">{{ $city->city_name }}</option>
+                                    @endforeach
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ translate('Zone')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <select class="form-control mb-3" id="zoneId" name="zone_id">
+                                    <option value="">Select Zone</option>
+                                    {{-- Zones will be dynamically loaded here --}}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ translate('Area')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <select class="form-control mb-3" id="areaId" name="area_id">
+                                    <option value="">Select Area</option>
+                                    {{-- Area will be dynamically loaded here --}}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label for="address">Address:</label>
+                            </div>
+                            <div class="col-md-10">
+                                 <textarea type="text" row="3" class="form-control mb-3" name="address" id="address" placeholder="Enter store address"></textarea>
                             </div>
                         </div>
 
@@ -102,7 +129,7 @@
                                 <label>{{ translate('Postal code')}}</label>
                             </div>
                             <div class="col-md-10">
-                                <input type="text" class="form-control mb-3 rounded-0" placeholder="{{ translate('Your Postal Code')}}" name="postal_code" value="" required>
+                                <input type="text" class="form-control mb-3" placeholder="{{ translate('Your Postal Code')}}" name="postal_code" value="" required>
                             </div>
                         </div>
 
@@ -112,7 +139,7 @@
                                 <label>{{ translate('Phone')}}</label>
                             </div>
                             <div class="col-md-10">
-                                <input type="text" class="form-control mb-3 rounded-0" placeholder="{{ translate('+880')}}" name="phone" value="" required>
+                                <input type="text" class="form-control mb-3" placeholder="{{ translate('0177XXXXXXX')}}" name="phone" value="" required>
                             </div>
                         </div>
                         <!-- Save button -->
@@ -146,6 +173,56 @@
 
 @section('script')
     <script type="text/javascript">
+
+    $('#zoneId').on('change', function () {
+            var selectedZoneId = $(this).val();
+            $('#areaId').empty();
+            $.ajax({
+                url: '{{ route("pathao.area2") }}', 
+                type: 'POST', 
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+                },
+                data: {
+                    zoneId: selectedZoneId 
+                },
+                success: function(response) {
+                    $('#areaId').append('<option value="">Select Area</option>');
+                    response.forEach(function (areas) {
+                        $('#areaId').append('<option value="' + areas.area_id + '">' + areas.area_name + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error calling route:', error);
+                }
+            });
+        });
+
+        $('#cityId').on('change', function () {
+
+        var selectedCityId = $(this).val();
+            $('#zoneId').empty();
+            $('#areaId').empty();
+            $.ajax({
+                url: '{{ route("pathao.zone2") }}', 
+                type: 'POST', 
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+                },
+                data: {
+                    cityId: selectedCityId 
+                },
+                success: function(response) {
+                    $('#zoneId').append('<option value="">Select Zone</option>');
+                    response.forEach(function (zone) {
+                        $('#zoneId').append('<option value="' + zone.zone_id + '">' + zone.zone_name + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error calling route:', error);
+                }
+            });
+        });
         function add_new_address(){
             $('#new-address-modal').modal('show');
         }
@@ -187,7 +264,7 @@
 
         $(document).on('change', '[name=state_id]', function() {
             var state_id = $(this).val();
-            get_city(state_id);
+            // get_city(state_id);
         });
         
         function get_states(country_id) {

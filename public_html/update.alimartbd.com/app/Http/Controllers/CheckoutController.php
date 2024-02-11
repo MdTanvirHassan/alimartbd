@@ -118,7 +118,7 @@ class CheckoutController extends Controller
         }
 
         $carts = Cart::where('user_id', Auth::user()->id)->get();
-        if($carts->isEmpty()) {
+        if ($carts->isEmpty()) {
             flash(translate('Your cart is empty'))->warning();
             return redirect()->route('home');
         }
@@ -129,18 +129,18 @@ class CheckoutController extends Controller
         }
 
         $carrier_list = array();
-        if(get_setting('shipping_type') == 'carrier_wise_shipping'){
-            $zone = \App\Models\Country::where('id',$carts[0]['address']['country_id'])->first()->zone_id;
+        if (get_setting('shipping_type') == 'carrier_wise_shipping') {
+            $zone = \App\Models\Country::where('id', $carts[0]['address']['country_id'])->first()->zone_id;
 
             $carrier_query = Carrier::query();
-            $carrier_query->whereIn('id',function ($query) use ($zone) {
+            $carrier_query->whereIn('id', function ($query) use ($zone) {
                 $query->select('carrier_id')->from('carrier_range_prices')
                 ->where('zone_id', $zone);
             })->orWhere('free_shipping', 1);
             $carrier_list = $carrier_query->get();
         }
-        
-        return view('frontend.delivery_info', compact('carts','carrier_list'));
+
+        return view('frontend.delivery_info', compact('carts', 'carrier_list'));
     }
 
     public function store_delivery_info(Request $request)

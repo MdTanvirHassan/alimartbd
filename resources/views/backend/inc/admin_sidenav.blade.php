@@ -1018,6 +1018,25 @@
                             <span class="aiz-side-nav-arrow"></span>
                         </a>
                         <ul class="aiz-side-nav-list level-2">
+                            <li class="aiz-side-nav-item">
+                            <a href="#" class="aiz-side-nav-link">
+                                
+                                <span class="aiz-side-nav-text">{{translate('Pathao Courier')}}</span>
+                                <span class="aiz-side-nav-arrow"></span>
+                            </a>
+                            <ul class="aiz-side-nav-list level-3">
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{route('pathao.store_list')}}" class="aiz-side-nav-link">
+                                        <span class="aiz-side-nav-text">{{translate('Store List')}}</span>
+                                    </a>
+                                </li>
+                                <!-- <li class="aiz-side-nav-item">
+                                    <a href="{{route('pathao.index')}}" class="aiz-side-nav-link">
+                                        <span class="aiz-side-nav-text">{{translate('Pathao Courier')}}</span>
+                                    </a>
+                                </li> -->
+                            </ul>
+                        </li>  
                             @can('general_settings')
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('general_setting.index')}}" class="aiz-side-nav-link">
