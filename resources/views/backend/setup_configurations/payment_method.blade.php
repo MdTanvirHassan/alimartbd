@@ -1,6 +1,124 @@
     @extends('backend.layouts.app')
 
     @section('content')
+     <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 h6 ">{{translate('Pathao Courier Credential')}}</h5>
+                </div>
+                
+                <div class="card-body">
+                    <form class="form-horizontal" action="{{ route('payment_method.update') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="payment_method" value="pathao_courier">
+                        <div class="form-group row">
+                            <input type="hidden" name="types[]" value="Cilent_ID">
+                            <div class="col-md-4">
+                                <label class="col-from-label">{{translate('Cilent ID')}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="Cilent_ID" value="{{  env('Cilent_ID') }}" placeholder="{{ translate('Client ID') }}" required>
+                            </div>
+                        </div>
+
+                       
+
+                        <div class="form-group row">
+                            <input type="hidden" name="types[]" value="Cilent_Email">
+                            <div class="col-md-4">
+                                <label class="col-from-label">{{translate('Cilent Email')}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="Cilent_Email" value="{{  env('Cilent_Email') }}" placeholder="{{ translate('Client Email') }}" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <input type="hidden" name="types[]" value="Cilent_Secret">
+                            <div class="col-md-4">
+                                <label class="col-from-label">{{translate('Cilent Secret')}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="Cilent_Secret" value="{{  env('Cilent_Secret') }}" placeholder="{{ translate('Client Secret') }}" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <input type="hidden" name="types[]" value="Cilent_Password">
+                            <div class="col-md-4">
+                                <label class="col-from-label">{{translate('Cilent Password')}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="Cilent_Password" value="{{  env('Cilent_Password') }}" placeholder="{{ translate('Cilent Password') }}" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <input type="hidden" name="types[]" value="pathao_base_url">
+                            <div class="col-md-4">
+                                <label class="col-from-label">{{translate('Pathao Base Url')}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="pathao_base_url" value="{{  env('pathao_base_url') }}" placeholder="{{ translate('Pathao Base Url') }}" required>
+                            </div>
+                        </div>
+
+                        
+                    
+                        <div class="form-group mb-0 text-right">
+                            <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 h6 ">{{translate('SteadFast Courier Credential')}}</h5>
+                </div>
+                
+                <div class="card-body">
+                    <form class="form-horizontal" action="{{ route('payment_method.update') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="payment_method" value="steadfast_courier">
+                        <div class="form-group row">
+                            <input type="hidden" name="types[]" value="Steadfast_Api_Key">
+                            <div class="col-md-4">
+                                <label class="col-from-label">{{translate('API Key')}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="Steadfast_Api_Key" value="{{  env('Steadfast_Api_Key') }}" placeholder="{{ translate('API Key') }}" required>
+                            </div>
+                        </div>
+                    
+                        <div class="form-group row">
+                            <input type="hidden" name="types[]" value="Steadfast_Secret_Key">
+                            <div class="col-md-4">
+                                <label class="col-from-label">{{translate('Secret Key')}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="Steadfast_Secret_Key" value="{{  env('Steadfast_Secret_Key') }}" placeholder="{{ translate('Secret Key') }}" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <input type="hidden" name="types[]" value="steadfast_base_url">
+                            <div class="col-md-4">
+                                <label class="col-from-label">{{translate('Stead Fast Base Url')}}</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="steadfast_base_url" value="{{  env('steadfast_base_url') }}" placeholder="{{ translate('Stead Fast Base Url') }}" required>
+                            </div>
+                        </div>
+                    
+                        <div class="form-group mb-0 text-right">
+                            <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="card">

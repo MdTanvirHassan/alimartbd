@@ -28,9 +28,13 @@ use Illuminate\Support\Facades\Route;
 
 class OrderController extends Controller
 {
-    public $base_url = "https://portal.steadfast.com.bd/api/v1";
+    public $steadfast_base_url;
+
+    // public $steadfast_base_url = "https://portal.steadfast.com.bd/api/v1";
+
     public function __construct()
     {
+        $this->steadfast_base_url = env("steadfast_base_url");
         // Staff Permission Check
         $this->middleware(['permission:view_all_orders|view_inhouse_orders|view_seller_orders|view_pickup_point_orders'])->only('all_orders');
         $this->middleware(['permission:view_order_details'])->only('show');
@@ -123,12 +127,13 @@ class OrderController extends Controller
             'Api-Key' => $api_key,
             'Secret-Key' => $secret_key,
             'Content-Type' => 'application/json'
-        ])->get($this->base_url . '/status_by_invoice/' . $order->code);
+        ])->get($this->steadfast_base_url . '/status_by_invoice/' . $order->code);
 
         $responseData = json_decode($response, true);
 
         return $responseData['delivery_status'];
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -165,7 +170,9 @@ class OrderController extends Controller
             $shippingAddress['address']     = $address->address;
             $shippingAddress['country']     = $address->country->name;
             $shippingAddress['state']       = $address->state->name;
-            $shippingAddress['city']        = $address->city->name;
+            $shippingAddress['city']        = $address->city_id;
+            $shippingAddress['zone']        = $address->zone_id;
+            $shippingAddress['area']        = $address->area_id;
             $shippingAddress['postal_code'] = $address->postal_code;
             $shippingAddress['phone']       = $address->phone;
             if ($address->latitude || $address->longitude) {

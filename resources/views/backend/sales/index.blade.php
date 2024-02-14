@@ -8,7 +8,7 @@
                     <h5 class="mb-md-0 h6">{{ translate('All Orders') }}</h5>
                 </div>
 
-                @can('delete_order')
+               @can('delete_order')
                     <div class="dropdown mb-2 mb-md-0">
                         <button class="btn border dropdown-toggle" type="button" data-toggle="dropdown">
                             {{ translate('Bulk Action') }}
@@ -21,6 +21,87 @@
                         </div>
                     </div>
                 @endcan
+
+                <div id="bulk-courier-modal" class="modal fade">
+                    <div class="modal-dialog modal-sm modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title h6">{{ translate('Courier Selection') }}</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <div class="form-group">
+                                    <label for="courier-select">{{ translate('Select Courier') }}</label>
+                                    <select id="courier-select" class="form-control" onchange="openModal(this.value)">
+                                        <option value="">{{ translate('Select Courier') }}</option>
+                                        <option value="pathao">{{ translate('Pathao') }}</option>
+                                        <option value="steadfast">{{ translate('Steadfast') }}</option>
+                                    </select>
+                                </div>
+                                
+                                <button type="button" class="btn btn-link mt-2" data-dismiss="modal">{{ translate('Cancel') }}</button>
+                                <a href="javascript:void(0)" onclick="bulk_courier()" class="btn btn-primary mt-2">{{ translate('Send') }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 {{-- //*pathao modal start--}}
+
+                 <div class="modal fade" id="pathaoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title h6">{{translate('Pathao Courier Crediential')}}</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <div class="form-group">
+                                    <label for="storeId">{{ translate('Store') }}:</label>
+                                    <select class="form-control" id="storeId" name="store_id" required>
+                                        <option value="">{{ translate('Select Store') }}</option>
+                                        @foreach (\App\Models\Pathao_store::orderBy('name', 'asc')->get() as $store)
+                                            <option value="{{ $store->store_id }}">{{ $store->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12 d-flex">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="deliveryType">Delivery Type:</label>
+                                                <select class="form-control" id="deliveryType" name="delivery_type" required>
+                                                    <option value="">Select Delivery Type</option>
+                                                    <option value="48">Normal Delivery</option>
+                                                    <option value="12">Demand Delivery</option>
+                                                </select>    
+                                            </div>
+                                        </div>
+                    
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="itemType">Item Type:</label>
+                                                <select class="form-control" id="itemType" name="item_type" required>
+                                                    <option value="">Select Item Type</option>
+                                                    <option value="1">Document</option>
+                                                    <option value="2">Parcel</option>
+                                                </select>      
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                </div>
+                              
+                                <button type="button" class="btn btn-secondary rounded-0 mt-2" data-dismiss="modal">{{translate('Cancel')}}</button>
+                                <a href="javascript:void(0)" onclick="bulk_courier()" class="btn btn-primary mt-2">{{ translate('Send') }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{--pathao modal end--}}
+
 
                 <div class="col-lg-2 ml-auto">
                     <select class="form-control aiz-selectpicker" name="delivery_status" id="delivery_status">
@@ -176,14 +257,20 @@
                                 @endif
                                 <td class="text-right">
                                     <div style="display: inline-block;">
-                                    <?php
-                                            $courier_check = \App\Models\Pathao_courier_order::where('merchant_order_id',$order->code)->value('order_status');
+                                     <?php
+                                        $courier_check = \App\Models\Pathao_courier_order::where('merchant_order_id', $order->code)->value('order_status');
 
-                                            $pathao_activation_check =\App\Models\BusinessSetting::where('type','pathao_courier')->value('value');
+                                        $pathao_courier_order = \App\Models\Pathao_courier_order::where('merchant_order_id', $order->code)->exists(); 
 
-                                            $steadfast_activation_check =\App\Models\BusinessSetting::where('type','steadfast_courier')->value('value');
+                                        $steadfast_courier_order = \App\Models\Consignment::where('invoice', $order->code)->exists(); 
+
+                                        $pathao_activation_check = \App\Models\BusinessSetting::where('type', 'pathao_courier')->value('value');
+
+                                        $steadfast_activation_check = \App\Models\BusinessSetting::where('type', 'steadfast_courier')->value('value');
                                         ?>
                                         
+                                        @if (!$pathao_courier_order )
+                                            @if(!$steadfast_courier_order )
                                             <div class="dropdown">
                                                 <button class="btn btn-danger btn-circle btn-sm dropdown-toggle" type="button" id="courierDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ translate('Send Courier') }}">
                                                     <i class="la la-automobile"></i>
@@ -197,6 +284,10 @@
                                                     @endif
                                                 </div>
                                             </div>
+                                            @endif
+                                        @endif  
+
+
                                     @if (addon_is_activated('pos_system') && $order->order_from == 'pos')
                                         <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
                                             href="{{ route('admin.invoice.thermal_printer', $order->id) }}" target="_blank"
@@ -317,6 +408,7 @@
       
             var selectedCourier = $('#courier-select').val();
             if (selectedCourier === 'pathao') {
+                
                 var data = new FormData($('#sort_orders')[0]);
                 $.ajax({
                     headers: {
@@ -363,5 +455,14 @@
             
             }
         }
+
     </script>
+
+<script>
+    function openModal(courier) {
+        if (courier === 'pathao') {
+            $('#pathaoModal').modal('show');
+        }
+    }
+</script>
 @endsection
