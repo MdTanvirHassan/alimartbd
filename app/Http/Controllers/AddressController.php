@@ -101,9 +101,11 @@ class AddressController extends Controller
         $address = Address::findOrFail($id);
         
         $address->address       = $request->address;
-        $address->country_id    = $request->country_id;
+         $address->country_id    = $request->country_id;
         $address->state_id      = $request->state_id;
         $address->city_id       = $request->city_id;
+        $address->zone_id       = $request->zone_id;
+        $address->area_id       = $request->area_id;
         $address->longitude     = $request->longitude;
         $address->latitude      = $request->latitude;
         $address->postal_code   = $request->postal_code;
